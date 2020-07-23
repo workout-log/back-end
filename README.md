@@ -45,7 +45,7 @@ http://workoutlog.club
    - 언어 : JavaScript(Node.js, koa)
    - 배포 환경 : Amazon Web Service EC2, docker, dockhub
    - 데이터베이스 : mongodb
-   - 인증 : JWT
+   - 인증 : Cookie
 2. Frontend
    - 라이브러리 : React
    - 언어 : HTML5, CSS3, JavaScript
