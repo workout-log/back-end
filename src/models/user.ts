@@ -6,7 +6,7 @@ const UserSchema: Schema = new Schema({
   email: String,
   profileImage: {
     type: String,
-    default: 'default.PNG'
+    default: '/upload/profileImage/default.PNG'
   },
   loginType: String,
   workoutDays: {
@@ -31,11 +31,11 @@ interface IUserModel extends Model<IUser> {
   findByEmail: (email: string) => mongoose.Query<IUser>;
 }
 
-UserSchema.static('findByEmail', function (email: string) {
+UserSchema.static('findByEmail', function(email: string) {
   return this.findOne({ email });
 });
 
-UserSchema.method('generateToken', function () {
+UserSchema.method('generateToken', function() {
   const token = jwt.sign( 
     {
       email: this.email,
@@ -52,4 +52,5 @@ UserSchema.method('generateToken', function () {
 });
 
 const User: IUserModel = mongoose.model<IUser, IUserModel>('User', UserSchema);
+
 export default User;
