@@ -1,6 +1,9 @@
 # dependencies
 /node_modules
 
+/mongo-volume
+/image-volume
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
