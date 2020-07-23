@@ -1,0 +1,16 @@
+# dependencies
+/node_modules
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock*
+
+.env
+.env.production
+.env.development
+mongo-init.js
+
+.DS_STORE
+.gitsecret/keys/random_seed
+!*.secret
