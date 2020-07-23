@@ -18,8 +18,8 @@ if (process.env.NODE_ENV === 'production') {
   throw new Error('process.env.NODE_ENV를 설정하지 않았습니다!');
 }
 
-
 const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
+
 mongoose
   .connect(MONGO_URI, {
     auth: {
