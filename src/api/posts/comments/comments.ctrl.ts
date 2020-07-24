@@ -8,6 +8,7 @@ import Joi from '@hapi/joi';
       text: '화이팅!',    
   }
 */
+
 export const write = async (ctx: any) => {
   const schema = Joi.object().keys({
     text: Joi.string().required(),
@@ -23,13 +24,13 @@ export const write = async (ctx: any) => {
   if (text.length < 1 || text.length > 50) {
     ctx.status = 400;
     ctx.body = {
-      error: '댓글은 1자 이상 50자 이하입니다.',
+      message: '댓글은 1자 이상 50자 이하입니다.',
     };
     return;
   }
   const post: any = new Post();
   try {
-    const postDoc: any = await Post.findOne({ id }).exec();
+    let { post: postDoc } = ctx.state;
     const comments = postDoc.comments;
     const comment_id = comments[comments.length - 1]
       ? comments[comments.length - 1].id + 1
@@ -63,10 +64,10 @@ export const write = async (ctx: any) => {
 /*
   GET /api/posts/:id/comments/
 */
+
 export const list = async (ctx: Context) => {
-  const { id } = ctx.params;
   try {
-    const post: any = await Post.findOne({ id }).exec();
+    const { post } = ctx.state;
     if (!post) {
       ctx.status = 404;
       return;
@@ -80,10 +81,11 @@ export const list = async (ctx: Context) => {
 /*
   GET /api/posts/:id/comments/:comment_id
 */
+
 export const read = async (ctx: Context) => {
   const { id, comment_id } = ctx.params;
   try {
-    const post: any = await Post.findOne({ id }).exec();
+    const { post } = ctx.state;
     if (!post) {
       ctx.status = 404;
       return;
@@ -106,10 +108,11 @@ export const read = async (ctx: Context) => {
 /*
   DELETE /api/posts/:id
 */
+
 export const remove = async (ctx: Context) => {
   const { id, comment_id } = ctx.params;
   try {
-    const post: any = await Post.findOne({ id }).exec();
+    const { post } = ctx.state;
     if (!post) {
       ctx.status = 404;
       return;
@@ -132,7 +135,10 @@ export const remove = async (ctx: Context) => {
           },
         );
         ctx.body = postValue;
-      } else ctx.status = 404;
+        ctx.status = 204;
+      } else {
+        ctx.status = 404;
+      }
     } else {
       ctx.status = 404;
     }
@@ -157,7 +163,7 @@ export const update = async (ctx: any) => {
   const { id, comment_id } = ctx.params;
   const { text } = ctx.request.body;
   try {
-    const postDoc: any = await Post.findOne({ id }).exec();
+    const { post: postDoc } = ctx.state;
     const comments = postDoc.comments;
 
     const newComent = comments.filter((c: any, i: number, arr: any) => {
@@ -180,7 +186,7 @@ export const update = async (ctx: any) => {
       {
         new: true,
       },
-    );
+    ).exec();
     ctx.body = newComent;
   } catch (e) {
     ctx.throw(500, e);
