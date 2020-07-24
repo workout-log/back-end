@@ -2,10 +2,11 @@ import Post from '../../models/post';
 import fs from 'fs';
 import { v1 as uuidv1 } from 'uuid';
 import { Context } from 'koa';
-import { extensionList } from '../../../utils/extensionList';
+import { extensionList } from '../../utils/extensionList';
 import Joi from '@hapi/joi';
 import User from '../../models/user';
 import sanitizeHtml from 'sanitize-html';
+import { mkdirFile, deleteFile, saveFile } from '../../utils/fileControl';
 
 const sanitizeOption = {
   allowedTags: [
@@ -47,7 +48,7 @@ export const write = async (ctx: any) => {
     title: Joi.string().required(),
     body: Joi.string().required(),
     files: Joi.any(),
-    tags: Joi.array().items(Joi.string()),
+    tags: Joi.any(),
     isPrivate: Joi.boolean().required(),
   });
   const result = schema.validate({
@@ -60,9 +61,8 @@ export const write = async (ctx: any) => {
     return;
   }
   const { title, body, isPrivate } = ctx.request.body;
-  let tags = ctx.request.body.tags;
-  if (tags && tags.length >= 2)
-    tags = tags.filter((t) => t !== process.env.DUMMY_TAG);
+  let { tags } = ctx.request.body;
+  if (typeof tags === 'string') tags = [tags];
   const time = new Date();
   const month =
     time.getMonth() + 1 < 10 ? `0${time.getMonth() + 1}` : time.getMonth() + 1;
@@ -77,9 +77,9 @@ export const write = async (ctx: any) => {
       const myLastPost: any = await Post.findOne({
         'user.email': userState.email,
       })
-        .sort({ publishedDate: -1 })
+        .sort({ id: -1 })
         .exec();
-      if (!lastPost) {
+      if (!myLastPost) {
         user = await User.findOneAndUpdate(
           { email: userState.email },
           {
@@ -91,7 +91,7 @@ export const write = async (ctx: any) => {
         );
       } else {
         const ONE_DAYS_GAP = 86400000;
-        const lastPostTime = new Date(lastPost.publishedDate.toString());
+        const lastPostTime = new Date(myLastPost.publishedDate.toString());
 
         let year = lastPostTime.getFullYear().toString(),
           month =
@@ -124,7 +124,7 @@ export const write = async (ctx: any) => {
           user = await User.findOneAndUpdate(
             { email: userState.email },
             {
-              workoutDays: lastPost.user.workoutDays + 1,
+              workoutDays: myLastPost.user.workoutDays + 1,
             },
             {
               new: true,
@@ -165,25 +165,35 @@ export const write = async (ctx: any) => {
   if (files) {
     await mkdirFile(fileDir);
     if (files.length) {
+      if (files.length > 3) {
+        ctx.body = {
+          message: '사진은 3개 이하 가능합니다.',
+        };
+        ctx.status = 400;
+        return;
+      }
       for (const file of files) {
         let fileName = uuidv1();
         let extension = file.name.split('.').slice(-1)[0].toUpperCase();
 
         try {
-          while (fs.lstatSync(`${fileDir}/${fileName}.${extension}`).isFile()) {
+          while (
+            fs
+              .lstatSync(`./public/${fileDir}/${fileName}.${extension}`)
+              .isFile()
+          ) {
             fileName = uuidv1();
             break;
           }
         } catch (e) {
-          console.error(e);
+          console.log(e);
         }
 
         let path = `${fileDir}/${fileName}.${extension}`;
-        console.log(file.name, extension);
         if (!extensionList.includes(extension)) {
-          ctx.status = 405;
+          ctx.status = 400;
           ctx.body = {
-            error: '허용되지 않은 확장자',
+            message: '허용되지 않은 확장자',
           };
           return;
         }
@@ -204,14 +214,14 @@ export const write = async (ctx: any) => {
           break;
         }
       } catch (e) {
-        console.error(e);
+        console.log(e);
       }
 
       let path = `${fileDir}/${fileName}.${extension}`;
       if (!extensionList.includes(extension)) {
-        ctx.status = 405;
+        ctx.status = 400;
         ctx.body = {
-          error: '허용되지 않은 확장자',
+          message: '허용되지 않은 확장자',
         };
         return;
       }
@@ -220,7 +230,11 @@ export const write = async (ctx: any) => {
         .catch((err: any) => console.log(err));
       await saveDatabase();
     } else {
-      await saveDatabase();
+      ctx.body = {
+        message: 'files에 값이 없습니다.',
+      };
+      ctx.status = 400;
+      return;
     }
   } else {
     await saveDatabase();
@@ -289,6 +303,7 @@ export const list = async (ctx: Context) => {
 /*
   GET /api/posts/:id
 */
+
 export const read = async (ctx: Context) => {
   ctx.body = ctx.state.post;
 };
@@ -296,10 +311,10 @@ export const read = async (ctx: Context) => {
 /*
   DELETE /api/posts/:id
 */
+
 export const remove = async (ctx: Context) => {
-  const { id } = ctx.params;
+  const { post } = ctx.state;
   try {
-    const post: any = await Post.findOne({ id }).exec();
     if (!post) {
       ctx.status = 404;
       return;
@@ -307,14 +322,11 @@ export const remove = async (ctx: Context) => {
     const pathList = post.files;
     if (pathList.length) {
       for (let i = 0; i < pathList.length; i++) {
-        await deleteFile(pathList[i]);
+        deleteFile(pathList[i]);
       }
-      post.remove();
-      return (ctx.status = 204);
-    } else {
-      post.remove();
-      ctx.status = 204;
     }
+    post.remove();
+    ctx.status = 204;
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -330,12 +342,13 @@ export const remove = async (ctx: Context) => {
     isPrivate: '비공개'
   }
 */
+
 export const update = async (ctx: any) => {
   const schema = Joi.object().keys({
     title: Joi.string(),
-    files: Joi.any(),
     body: Joi.string(),
-    tags: Joi.array().items(Joi.string()),
+    files: Joi.any(),
+    tags: Joi.any(),
     isPrivate: Joi.boolean().required(),
   });
   const result = schema.validate({
@@ -347,6 +360,9 @@ export const update = async (ctx: any) => {
     ctx.body = result.error;
     return;
   }
+  let { post } = ctx.state;
+  let { tags } = ctx.request.body;
+  if (typeof tags === 'string') tags = [tags];
   const { id } = ctx.params;
   const time = new Date();
   const month =
@@ -354,13 +370,18 @@ export const update = async (ctx: any) => {
   const files = ctx.request.files.files;
   const fileDir = `upload/${time.getFullYear().toString()}/${month}`;
   const filesData: Array<string> = [];
-  let post: any = await Post.findOne({ id }).exec();
   const pathList = post.files;
+  console.log(post);
   const nextData = { ...ctx.request.body };
   if (nextData.body) {
-    nextData.body = sanitizeHtml(nextData.body);
+    nextData.body = sanitizeHtml(nextData.body, sanitizeOption);
   }
   const updateDatabase = async () => {
+    if (pathList.length) {
+      for (let i = 0; i < pathList.length; i++) {
+        deleteFile(pathList[i]);
+      }
+    }
     try {
       if (!post) {
         ctx.status = 404;
@@ -377,41 +398,45 @@ export const update = async (ctx: any) => {
         {
           new: true,
         },
-      );
-
+      ).exec();
       ctx.body = post;
     } catch (e) {
       ctx.throw(500, e);
     }
   };
 
-  if (pathList.length) {
-    for (let i = 0; i < pathList.length; i++) {
-      await deleteFile(pathList[i]);
-    }
-  }
-
   if (files) {
     await mkdirFile(fileDir);
     if (files.length) {
+      if (files.length > 3) {
+        ctx.body = {
+          message: '사진은 3개 이하 가능합니다.',
+        };
+        ctx.status = 400;
+        return;
+      }
       for (const file of files) {
         let fileName = uuidv1();
         let extension = file.name.split('.').slice(-1)[0].toUpperCase();
 
         try {
-          while (fs.lstatSync(`${fileDir}/${fileName}.${extension}`).isFile()) {
+          while (
+            fs
+              .lstatSync(`./public/${fileDir}/${fileName}.${extension}`)
+              .isFile()
+          ) {
             fileName = uuidv1();
             break;
           }
         } catch (e) {
-          console.error(e);
+          console.log(e);
         }
 
         let path = `${fileDir}/${fileName}.${extension}`;
         if (!extensionList.includes(extension)) {
-          ctx.status = 405;
+          ctx.status = 400;
           ctx.body = {
-            error: '허용되지 않은 확장자',
+            message: '허용되지 않은 확장자',
           };
           return;
         }
@@ -432,14 +457,14 @@ export const update = async (ctx: any) => {
           break;
         }
       } catch (e) {
-        console.error(e);
+        console.log(e);
       }
 
       let path = `${fileDir}/${fileName}.${extension}`;
       if (!extensionList.includes(extension)) {
-        ctx.status = 405;
+        ctx.status = 400;
         ctx.body = {
-          error: '허용되지 않은 확장자',
+          message: '허용되지 않은 확장자',
         };
         return;
       }
@@ -448,46 +473,15 @@ export const update = async (ctx: any) => {
         .catch((err: any) => console.log(err));
       await updateDatabase();
     } else {
-      await updateDatabase();
+      ctx.body = {
+        message: 'files에 값이 없습니다.',
+      };
+      ctx.status = 400;
+      return;
     }
   } else {
     await updateDatabase();
   }
-};
-
-const mkdirFile = (path: string) => {
-  let pathList = path.split('/');
-  let fileDir = './public';
-  pathList.forEach((i) => {
-    if (i) {
-      fileDir += '/' + i;
-      try {
-        fs.lstatSync(fileDir).isDirectory();
-      } catch (e) {
-        fs.mkdirSync(fileDir);
-      }
-    }
-  });
-};
-
-const saveFile = (file: any, path: string) => {
-  return new Promise((resolve, reject) => {
-    let render = fs.createReadStream(file.path);
-    let upStream = fs.createWriteStream(`./public/${path}`);
-    render.pipe(upStream);
-    upStream.on('finish', () => {
-      resolve(path);
-    });
-    upStream.on('error', (err) => {
-      reject(err);
-    });
-  });
-};
-
-const deleteFile = (path: string) => {
-  fs.unlink(`./public/${path}`, (err) => {
-    if (err) console.error(err);
-  });
 };
 
 export const getPostById = async (ctx: Context, next: () => void) => {
