@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:4.0
+    container_name: mongo
+    env_file:
+      - ./.env
+    ports:
+      - '${PORT}:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${PASSWORD}'
+    volumes:
+      - ./mongo-volume:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    command: [--auth]
+
+  workoutlog:
+    container_name: workoutlog
+    image: 'woochanlee/workoutlog:latest'
+    ports:
+      - '5000:5000'
+    links:
+      - 'mongo:mongo'
+    volumes:
+      - ./image-volume:/app/public/upload
