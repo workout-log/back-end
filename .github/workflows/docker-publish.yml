@@ -16,14 +16,14 @@ jobs:
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu:18.04
 
     steps:
       - uses: actions/checkout@v2
       - name: Pull a git-secret and build Docker
         run: |
           echo Hello,
-          sudo apt update && sudo apt install git-secret,
+          sudo apt-get update && sudo apt-get install git-secret,
           echo after install git-secret
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
