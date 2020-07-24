@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import * as commentCtrl from './comment.ctrl';
+import * as commentCtrl from './comments.ctrl';
 import recomments from './recomments';
 import checkLoggedIn from '../../../lib/checkLoggedIn';
 
