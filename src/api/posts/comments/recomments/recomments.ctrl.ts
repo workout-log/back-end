@@ -1,6 +1,6 @@
-import Post from "../../../../models/post";
-import { Context } from "koa";
-import Joi from "@hapi/joi";
+import Post from '../../../../models/post';
+import { Context } from 'koa';
+import Joi from '@hapi/joi';
 
 /*
   POST /api/posts/:id/comments/:comment_id/recomment
@@ -23,13 +23,13 @@ export const write = async (ctx: any) => {
   if (text.length < 1 || text.length > 50) {
     ctx.status = 400;
     ctx.body = {
-      error: '댓글은 1자 이상 50자 이하입니다.'
-    }
+      message: '댓글은 1자 이상 50자 이하입니다.',
+    };
     return;
   }
   const post: any = new Post();
   try {
-    const postDoc: any = await Post.findOne({ id }).exec();
+    const { post: postDoc } = ctx.state;
     const comments = postDoc.comments;
 
     let comment_index: number = -1;
@@ -60,7 +60,7 @@ export const write = async (ctx: any) => {
       },
       {
         new: true,
-      }
+      },
     );
     ctx.body = recommentDoc;
   } catch (e) {
@@ -71,6 +71,7 @@ export const write = async (ctx: any) => {
 /*
   GET /api/posts/:id/comments/:comment_id/recomments
 */
+
 export const list = async (ctx: Context) => {
   const { id, comment_id } = ctx.params;
   const { text } = ctx.request.body;
@@ -98,18 +99,13 @@ export const list = async (ctx: Context) => {
 };
 
 /*
-  GET /api/posts/:id/comments/:comment_id
-*/
-// export const read = async (ctx: Context) => {};
-
-/*
   DELETE /api/posts/:id
 */
+
 export const remove = async (ctx: Context) => {
   const { id, comment_id, recomment_id } = ctx.params;
-  const post: any = new Post();
   try {
-    const postDoc: any = await Post.findOne({ id }).exec();
+    const { post: postDoc } = ctx.state;
     const comments = postDoc.comments;
 
     let comment_index: number = -1;
@@ -125,14 +121,14 @@ export const remove = async (ctx: Context) => {
     }
     const recomments = comments[comment_index].recomments;
     const newRecomments = recomments.filter(
-      (r: any) => r.id.toString() !== recomment_id
+      (r: any) => r.id.toString() !== recomment_id,
     );
     if (recomments.join() === newRecomments.join()) {
       ctx.status = 404;
       return;
     }
     comments[comment_index].recomments = newRecomments;
-    const postValue = await Post.findOneAndUpdate(
+    await Post.findOneAndUpdate(
       {
         id,
       },
@@ -140,10 +136,10 @@ export const remove = async (ctx: Context) => {
         comments,
       },
       {
-        new: true
-      }
-    );
-    ctx.body = postValue;
+        new: true,
+      },
+    ).exec();
+    ctx.status = 204;
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -204,7 +200,7 @@ export const update = async (ctx: any) => {
       },
       {
         new: true,
-      }
+      },
     );
     ctx.body = comments;
   } catch (e) {
@@ -224,7 +220,11 @@ export const getRecommentById = (ctx: Context, next: () => void) => {
     let recomment;
     recomments.filter((r: any) => {
       if (r.id.toString() === recomment_id) recomment = r;
-    })
+    });
+    if (!recomment) {
+      ctx.status = 404;
+      return;
+    }
     ctx.state.recomment = recomment;
     return next();
   } catch (e) {
@@ -239,4 +239,4 @@ export const checkOwnRecomment = async (ctx: Context, next: () => void) => {
     return;
   }
   return next();
-}
+};
