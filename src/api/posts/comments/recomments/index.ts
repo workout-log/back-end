@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import * as recommentCtrl from "./recomment.ctrl";
+import * as recommentCtrl from "./recomments.ctrl";
 import checkLoggedIn from "../../../../lib/checkLoggedIn";
 
 const recomments = new Router();
