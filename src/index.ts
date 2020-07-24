@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
- 
+
 mongoose
   .connect(MONGO_URI, {
     auth: {
@@ -56,6 +56,6 @@ app.use(jwtMiddleware);
 app.use(router.routes()).use(router.allowedMethods());
 
 const port = PORT || 5000;
-app.listen(port, () => {
+app.listen(Number(port), '0.0.0.0', 0 ,() => {
   console.log('➡️  start koa server at http://localhost:%d', port);
 });
