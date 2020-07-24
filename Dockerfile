@@ -2,7 +2,7 @@ FROM node:12
 
 ARG SCRIPT
 ENV SCRIPT_ENV=${SCRIPT}
-
+RUN echo ${SCRIPT_ENV}
 LABEL woochanlee <030219woo@naver.com>
 
 RUN mkdir -p /app
