@@ -24,13 +24,15 @@ jobs:
         
       - name: build docker image
         env:
+          TEST: hello
           PORT: ${{ secrets.PORT }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
           CORRS_ORIGIN_URI: ${{ secrets.CORRS_ORIGIN_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run:
+        run: |
+          echo TEST
           docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CROSS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
 
       - name: push docker image
