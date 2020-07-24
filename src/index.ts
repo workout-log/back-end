@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-import path from 'path';
 import Koa from 'koa';
 import Router from 'koa-router';
 import bodyparser from 'koa-bodyparser';
@@ -9,14 +7,6 @@ import koaStatic from 'koa-static';
 
 import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
-
-if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: path.join(__dirname, '../.env.production') });
-} else if (process.env.NODE_ENV === 'development') {
-  dotenv.config({ path: path.join(__dirname, '../.env.development') });
-} else {
-  throw new Error('process.env.NODE_ENV를 설정하지 않았습니다!');
-}
 
 const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
 
@@ -56,6 +46,6 @@ app.use(jwtMiddleware);
 app.use(router.routes()).use(router.allowedMethods());
 
 const port = PORT || 5000;
-app.listen(Number(port), '0.0.0.0', 0 ,() => {
+app.listen(Number(port), '0.0.0.0', 0, () => {
   console.log('➡️  start koa server at http://localhost:%d', port);
 });
