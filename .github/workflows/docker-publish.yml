@@ -15,25 +15,34 @@ env:
 jobs:
   DOCKER_BUILD_PUSH:
     runs-on: ubuntu-18.04
-    env:
-      PORT: ${{ secrets.PORT }}
-      MONGO_URI: ${{ secrets.MONGO_URI }}
-      USERNAME: ${{ secrets.USERNAME }}
-      PASSWORD: ${{ secrets.PASSWORD }}
-      CORRS_ORIGIN_URI: ${{ secrets.CORRS_ORIGIN_URI }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    
     steps:
-      - uses: actions/checkout@v2
+      - name: CheckOut
+        uses: actions/checkout@v2
+        with:
+          repository: workout-log/back-end
+        
       - name: build docker image
-        run:
-          docker build --build-arg SCRIPT="PORT=${PORT} MONGO_URI=${MONGO_URI} USERNAME=${USERNAME} PASSWORD=${PASSWORD} CORRS_ORIGIN_URI=${CROSS_ORIGIN_URI} JWT_SECRET=${JWT_SECRET}" -t woochanlee/workoutlog .
+        env:
+          TEST: hello
+          PORT: ${{ secrets.PORT }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          CORRS_ORIGIN_URI: ${{ secrets.CORRS_ORIGIN_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          echo ${TEST}
+          echo $TEST
+          docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CROSS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
 
       - name: push docker image
-      - uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: workoutlog
+          name: woochanlee/workoutlog
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: latest
 #          sudo apt-get update && sudo apt-get install gpg,
 #          echo after install git-secret
   # Push image to GitHub Packages.
