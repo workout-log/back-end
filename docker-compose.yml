@@ -12,7 +12,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: '${USERNAME}'
       MONGO_INITDB_ROOT_PASSWORD: '${PASSWORD}'
     volumes:
-      - ./mongo-volume:/data/db
+      - /backup_volumes/mongo-volume:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     command: [--auth]
 
@@ -24,4 +24,4 @@ services:
     links:
       - 'mongo:mongo'
     volumes:
-      - ./image-volume:/app/public/upload
+      - /backup_volumes/image-volume:/app/public/upload
