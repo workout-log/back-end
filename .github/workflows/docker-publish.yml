@@ -23,7 +23,7 @@ jobs:
       - name: Pull a git-secret and build Docker
         run: |
           echo Hello,
-          sudo apt-get update && sudo apt-get install git-secret,
+          sudo apt update && sudo apt install git-secret,
           echo after install git-secret
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
