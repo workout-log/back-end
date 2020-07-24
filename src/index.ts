@@ -9,7 +9,7 @@ import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
 
 const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
-
+console.log('test');
 mongoose
   .connect(MONGO_URI, {
     auth: {
