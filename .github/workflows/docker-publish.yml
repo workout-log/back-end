@@ -34,6 +34,8 @@ jobs:
           name: workoutlog
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: woochanlee/workoutlog
+          tags: latest
 #          sudo apt-get update && sudo apt-get install gpg,
 #          echo after install git-secret
   # Push image to GitHub Packages.
