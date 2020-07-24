@@ -17,6 +17,11 @@ jobs:
     runs-on: ubuntu-18.04
     
     steps:
+      - name: CheckOut
+        uses: actions/checkout@v2
+        with:
+          repository: workout-log/back-end
+        
       - env:
           PORT: ${{ secrets.PORT }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
@@ -24,13 +29,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           CORRS_ORIGIN_URI: ${{ secrets.CORRS_ORIGIN_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-        name: CheckOut
-        uses: actions/checkout@v2
-        with:
-          repository: workout-log/back-end
-        
-      - name: build docker image
+        name: build docker image
         run:
           docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=${MONGO_URI} USERNAME=${USERNAME} PASSWORD=${PASSWORD} CORRS_ORIGIN_URI=${CROSS_ORIGIN_URI} JWT_SECRET=${JWT_SECRET}" -t woochanlee/workoutlog .
 
