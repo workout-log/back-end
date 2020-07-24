@@ -15,5 +15,3 @@ yarn.lock*
 mongo-init.js
 
 .DS_STORE
-.gitsecret/keys/random_seed
-!*.secret
