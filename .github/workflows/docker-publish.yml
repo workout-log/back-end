@@ -32,17 +32,14 @@ jobs:
           CORRS_ORIGIN_URI: ${{ secrets.CORRS_ORIGIN_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          echo ${TEST}
-          echo $TEST
           docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CROSS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
 
       - name: push docker image
-        uses: elgohr/Publish-Docker-Github-Action@master
-        with:
-          name: woochanlee/workoutlog
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: latest
+        run: |
+          docker login
+          ${{ secrets.DOCKER_USERNAME }}
+          ${{ secrets.DOCKER_PASSWORD }}
+          docker push woochanlee/workoutlog
 #          sudo apt-get update && sudo apt-get install gpg,
 #          echo after install git-secret
   # Push image to GitHub Packages.
