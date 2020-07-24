@@ -23,8 +23,9 @@ jobs:
       - name: Pull a git-secret and build Docker
         run: |
           echo Hello,
-          sudo apt-get update && sudo apt-get install gpg,
-          echo after install git-secret
+          lsb_release -a,
+#          sudo apt-get update && sudo apt-get install gpg,
+#          echo after install git-secret
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
 #   push:
