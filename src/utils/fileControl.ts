@@ -19,3 +19,18 @@ export const saveFile = (file: any, path: string) => {
     });
   });
 };
+
+export const mkdirFile = (path: string) => {
+  let pathList = path.split('/');
+  let fileDir = './public';
+  pathList.forEach((i) => {
+    if (i) {
+      fileDir += '/' + i;
+      try {
+        fs.lstatSync(fileDir).isDirectory();
+      } catch (e) {
+        fs.mkdirSync(fileDir);
+      }
+    }
+  });
+};
