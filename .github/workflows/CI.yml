@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  DOCKER_BUILD_PUSH:
+    runs-on: ubuntu-18.04
+    
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@v2
+        with:
+          repository: workout-log/back-end
+
+      - name: Login to Docker
+        run: docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build a Docker Image
+        run: |
+          docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CROSS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
+        env:
+          TEST: hello
+          PORT: ${{ secrets.PORT }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          CORRS_ORIGIN_URI: ${{ secrets.CORRS_ORIGIN_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Push a Docker Image
+        run:
+          docker push woochanlee/workoutlog
