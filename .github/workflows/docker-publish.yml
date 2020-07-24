@@ -29,7 +29,7 @@ jobs:
           docker build --build-arg SCRIPT="PORT=${PORT} MONGO_URI=${MONGO_URI} USERNAME=${USERNAME} PASSWORD=${PASSWORD} CORRS_ORIGIN_URI=${CROSS_ORIGIN_URI} JWT_SECRET=${JWT_SECRET}" -t woochanlee/workoutlog .
 
       - name: push docker image
-      - uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: workoutlog
           username: ${{ secrets.DOCKER_USERNAME }}
