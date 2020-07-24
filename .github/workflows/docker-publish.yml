@@ -25,7 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build docker image
-        run: docker build --build-arg SCRIPT="PORT=${PORT} MONGO_URI=${MONGO_URI} USERNAME=${USERNAME} PASSWORD=${PASSWORD} CORRS_ORIGIN_URI=${CROSS_ORIGIN_URI} JWT_SECRET=${JWT_SECRET}" -t woochanlee/workoutlog .
+        run:
+          docker build --build-arg SCRIPT="PORT=${PORT} MONGO_URI=${MONGO_URI} USERNAME=${USERNAME} PASSWORD=${PASSWORD} CORRS_ORIGIN_URI=${CROSS_ORIGIN_URI} JWT_SECRET=${JWT_SECRET}" -t woochanlee/workoutlog .,
+          docker push woochanlee/workoutlog
 #          sudo apt-get update && sudo apt-get install gpg,
 #          echo after install git-secret
   # Push image to GitHub Packages.
