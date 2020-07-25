@@ -10,8 +10,7 @@ on:
 
 jobs:
   DOCKER_BUILD_PUSH:
-    runs-on: ubuntu-18.04
-    
+    runs-on: ubuntu-latest
     steps:
       - name: CheckOut
         uses: actions/checkout@v2
@@ -39,3 +38,10 @@ jobs:
       - name: Push a Docker Image
         run:
           docker push woochanlee/workoutlog
+
+  DOCKER_COMPOSE_UP:
+    needs: [DOCKER_BUILD_PUSH]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Compose Up
+        run: docker-compose up
