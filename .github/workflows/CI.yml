@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  YARN_START:
+  YARN_TEST:
      runs-on: ubuntu-latest
      steps:
        - name: CheckOut
@@ -19,11 +19,11 @@ jobs:
        - name: Yarn install
          run: yarn install
 
-       - name: Yarn start
-         run: yarn cross-env PORT=7777 MONGO_URI=mongodb://localhost:27017 ts-node src
+       - name: Yarn test
+         run: yarn cross-env MONGO_URI=mongodb://localhost:27017 mocha test/*.ts -r ts-node/register
          
   DOCKER_BUILD_PUSH:
-    needs: [YARN_START]
+    needs: [YARN_TEST]
     runs-on: ubuntu-latest
     steps:
       - name: CheckOut
