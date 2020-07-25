@@ -26,7 +26,7 @@ jobs:
          HOST: ${{ secrets.EC2_HOST }}
          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
          script: |
-           git clone https://github.com/workout-log/back-end.git
            cd back-end
+           git pull
            docker pull woochanlee/workoutlog
            docker-compose up -d
