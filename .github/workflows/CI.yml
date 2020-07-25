@@ -18,7 +18,7 @@ jobs:
            repository: workout-log/back-end
            
        - name: Mongo start
-         run: docker run --name mongo -p 27017:27017 mongo:4.0
+         run: docker run --name mongo -d -p 27017:27017 mongo:4.0
          
        - name: Yarn install
          run: yarn install
