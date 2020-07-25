@@ -12,6 +12,10 @@ jobs:
   YARN_START:
      runs-on: ubuntu-latest
      steps:
+       - name: CheckOut
+         uses: actions/checkout@v2
+         with:
+           repository: workout-log/back-end
        - name: Yarn install
          run: yarn install
 
