@@ -11,12 +11,10 @@ jobs:
    steps:
      - name: CheckOut
        uses: actions/checkout@v2
-       with:
-         repository: workout-log/back-end
        
      - name: Chmod
        run:
-        chmod 777 ~/deploment.sh
+        chmod 777 ~/work/backend/backenddeploment.sh
         
      - name: Delpoy to ec2
        uses: appleboy/ssh-action@master
