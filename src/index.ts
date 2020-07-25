@@ -10,12 +10,20 @@ import jwtMiddleware from './lib/jwtMiddleware';
 
 const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
 
+const auth = {
+  ...(USERNAME && PASSWORD
+    ? {
+        auth: {
+          user: USERNAME,
+          password: PASSWORD,
+        },
+      }
+    : ''),
+};
+
 mongoose
   .connect(MONGO_URI, {
-    auth: {
-      user: USERNAME,
-      password: PASSWORD,
-    },
+    ...auth,
     useNewUrlParser: true,
     useFindAndModify: false,
     useUnifiedTopology: true,
