@@ -26,7 +26,7 @@ jobs:
          HOST: ${{ secrets.EC2_HOST }}
          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
          script: |
-           echo $PATH
-           export PATH=/usr/local/bin:$PATH
+           git clone https://github.com/workout-log/back-end.git
+           cd backend
            docker pull woochanlee/workoutlog
            docker-compose up -d
