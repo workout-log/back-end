@@ -7,8 +7,6 @@ on:
 
 jobs:
   deploy:
-    needs:
-      on: DOCKER_BUILD_PUSH
     runs-on: ubuntu-latest
     steps:
       - name: Delpoy to ec2
