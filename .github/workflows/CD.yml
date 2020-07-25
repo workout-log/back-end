@@ -24,7 +24,6 @@ jobs:
        with:
          USERNAME: ${{ secrets.EC2_USERNAME }}
          HOST: ${{ secrets.EC2_HOST }}
-         SCRIPT: ~/deployment.sh
          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
          script: |
            docker pull woochanlee/workoutlog
