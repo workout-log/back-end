@@ -9,6 +9,11 @@ jobs:
   deploy:
    runs-on: ubuntu-latest
    steps:
+     - name: CheckOut
+       uses: actions/checkout@v2
+       with:
+         repository: workout-log/back-end
+       
      - name: Chmod
        run:
         chmod 777 ~/deploment.sh
