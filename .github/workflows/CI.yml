@@ -27,7 +27,6 @@ jobs:
         run: |
           docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CROSS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
         env:
-          TEST: hello
           PORT: ${{ secrets.PORT }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           USERNAME: ${{ secrets.USERNAME }}
@@ -51,11 +50,11 @@ jobs:
       - name: Create Environment Files
         run: |
           touch .env
-          vim .env
-          ${{ secrets.MONGO_DB_ENV }}
-          touch mongo-init.js
-          vim mongo-init.js
-          ${{ secrets.MONGO_INIT_JS }}
+#          vim .env
+ #         ${{ secrets.MONGO_DB_ENV }}
+  #        touch mongo-init.js
+   #       vim mongo-init.js
+    #      ${{ secrets.MONGO_INIT_JS }}
           
       - name: Docker Compose Up
         run: docker-compose up
