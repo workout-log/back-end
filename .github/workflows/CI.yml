@@ -48,5 +48,14 @@ jobs:
         with:
           repository: workout-log/back-end
 
+      - name: Create Environment Files
+        run: |
+          touch .env
+          vim .env
+          ${{ secrets.MONGO_DB_ENV }}
+          touch mongo-init.js
+          vim mongo-init.js
+          ${{ secrets.MONGO_INIT_JS }}
+          
       - name: Docker Compose Up
         run: docker-compose up
