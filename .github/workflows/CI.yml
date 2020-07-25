@@ -43,5 +43,10 @@ jobs:
     needs: [DOCKER_BUILD_PUSH]
     runs-on: ubuntu-latest
     steps:
+      - name: CheckOut
+        uses: actions/checkout@v2
+        with:
+          repository: workout-log/back-end
+
       - name: Docker Compose Up
         run: docker-compose up
