@@ -27,6 +27,6 @@ jobs:
          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
          script: |
            git clone https://github.com/workout-log/back-end.git
-           cd backend
+           cd back-end
            docker pull woochanlee/workoutlog
            docker-compose up -d
