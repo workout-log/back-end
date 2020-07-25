@@ -1,0 +1,22 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delpoy to ec2
+        uses: appleboy/ssh-action@master
+        with:
+          USERNAME: ${{ secrets.EC2_USERNAME }}
+          HOST: ${{ secrets.EC2_HOST }}
+          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
+          script: |
+            cd back-end
+            git pull
+            sudo docker pull woochanlee/workoutlog
+            sudo docker-compose up -d
