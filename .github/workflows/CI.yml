@@ -14,8 +14,6 @@ jobs:
      steps:
        - name: CheckOut
          uses: actions/checkout@v2
-         with:
-           repository: workout-log/back-end
            
        - name: Mongo start
          run: docker run --name mongo -d -p 27017:27017 mongo:4.0
