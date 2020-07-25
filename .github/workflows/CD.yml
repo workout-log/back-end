@@ -15,8 +15,9 @@ jobs:
         repository: workout-log/back-end
        
      - name: Chmod
-       run:
-        chmod 777 ~/home/runner/work/back-end/back-end/deploment.sh
+       run: |
+        ls
+        chmod 777 deploment.sh
         
      - name: Delpoy to ec2
        uses: appleboy/ssh-action@master
