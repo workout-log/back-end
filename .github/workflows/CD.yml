@@ -21,8 +21,11 @@ jobs:
         
      - name: Delpoy to ec2
        uses: appleboy/ssh-action@master
-       env:
+       with:
          USERNAME: ${{ secrets.EC2_USERNAME }}
          HOST: ${{ secrets.EC2_HOST }}
          SCRIPT: ~/deployment.sh
          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
+         script: |
+           docker pull woochanlee/workoutlog
+           docker-compose up -d
