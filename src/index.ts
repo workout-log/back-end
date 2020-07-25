@@ -8,8 +8,6 @@ import koaStatic from 'koa-static';
 import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
 
-let isSuccess = true;
-
 const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
 
 const auth = {
@@ -34,7 +32,6 @@ mongoose
     console.log('➡️  Connected to MongoDB');
   })
   .catch((e: any) => {
-    isSuccess = false;
     console.error(e);
   });
 
@@ -60,5 +57,3 @@ const port = PORT || 5000;
 app.listen(Number(port), '0.0.0.0', 0, () => {
   console.log('➡️  start koa server at http://localhost:%d', port);
 });
-
-export const getConnectResult = () => isSuccess;
