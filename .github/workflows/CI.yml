@@ -1,40 +1,37 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
 
 jobs:
   YARN_TEST:
-     runs-on: ubuntu-latest
-     steps:
-       - name: CheckOut
-         uses: actions/checkout@v2
-         with:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@v2
+        with:
           repository: workout-log/back-end
-           
-       - name: Mongo start
-         run: docker run --name mongo -d -p 27017:27017 mongo:4.0
-         
-       - name: Cache node modules      # node modules 캐싱
-         uses: actions/cache@v1
-         with:
-           path: node_modules
-           key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-           restore-keys: |
-             ${{ runner.OS }}-build-
-             ${{ runner.OS }}-
-             
-       - name: Yarn install
-         run: yarn install
 
-       - name: Yarn test
-         run: yarn cross-env MONGO_URI=mongodb://localhost:27017 mocha test/*.ts -r ts-node/register --exit
-         
+      - name: Mongo start
+        run: docker run --name mongo -d -p 27017:27017 mongo:4.0
+
+      - name: Cache node modules # node modules 캐싱
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Yarn test
+        run: yarn cross-env MONGO_URI=mongodb://localhost:27017 mocha test/*.ts -r ts-node/register --exit
+
   DOCKER_BUILD_PUSH:
     needs: [YARN_TEST]
     runs-on: ubuntu-latest
@@ -62,5 +59,4 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Push a Docker Image
-        run:
-          docker push woochanlee/workoutlog
+        run: docker push woochanlee/workoutlog
