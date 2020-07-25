@@ -1,1 +1,27 @@
+name: CD
 
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  deploy:
+   runs-on: ubuntu-latest
+   steps:
+     - name: CheckOut
+       uses: actions/checkout@v2
+       with:
+        repository: workout-log/back-end
+       
+     - name: Chmod
+       run:
+        chmod 777 ~/home/runner/work/back-end/back-end/deploment.sh
+        
+     - name: Delpoy to ec2
+       uses: appleboy/ssh-action@master
+       env:
+         USERNAME: ${{ secrets.EC2_USERNAME }}
+         HOST: ${{ secrets.EC2_HOST }}
+         SCRIPT: ~/deployment.sh
+         KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
