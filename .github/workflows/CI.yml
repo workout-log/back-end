@@ -51,8 +51,8 @@ jobs:
         run: |
           touch .env
           vim .env
-          ${{ secrets.MONGO_DB_ENV }}
-          :wq!
+#          ${{ secrets.MONGO_DB_ENV }}
+#:wq!
   #        touch mongo-init.js
  #         vim mongo-init.js
 #          ${{ secrets.MONGO_INIT_JS }} :wq!
