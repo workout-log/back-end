@@ -26,5 +26,7 @@ jobs:
          HOST: ${{ secrets.EC2_HOST }}
          KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
          script: |
+           echo $PATH
+           export PATH=/usr/local/bin:$PATH
            docker pull woochanlee/workoutlog
            docker-compose up -d
