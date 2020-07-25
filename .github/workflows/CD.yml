@@ -16,6 +16,7 @@ jobs:
        
      - name: Chmod
        run:
+        ls
         chmod 777 deploment.sh
         
      - name: Delpoy to ec2
