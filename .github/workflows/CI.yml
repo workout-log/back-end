@@ -16,11 +16,15 @@ jobs:
          uses: actions/checkout@v2
          with:
            repository: workout-log/back-end
+           
+       - name: Mongo start
+         run: docker run --name mongo -d -p 27017:27017 mongo:4.0
+         
        - name: Yarn install
          run: yarn install
 
        - name: Yarn test
-         run: yarn cross-env MONGO_URI=mongodb://localhost:27027 mocha test/*.ts -r ts-node/register --exit
+         run: yarn cross-env MONGO_URI=mongodb://localhost:27017 mocha test/*.ts -r ts-node/register --exit
          
   DOCKER_BUILD_PUSH:
     needs: [YARN_TEST]
