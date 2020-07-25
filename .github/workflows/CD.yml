@@ -14,7 +14,7 @@ jobs:
        
      - name: Chmod
        run:
-        chmod 777 ~/work/backend/backenddeploment.sh
+        chmod 777 ~/work/backend/backend/deploment.sh
         
      - name: Delpoy to ec2
        uses: appleboy/ssh-action@master
