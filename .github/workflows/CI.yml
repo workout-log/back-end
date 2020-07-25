@@ -20,7 +20,7 @@ jobs:
          run: yarn install
 
        - name: Yarn test
-         run: yarn cross-env MONGO_URI=mongodb://localhost:27027 mocha test/*.ts -r ts-node/register --exit
+         run: yarn cross-env MONGO_URI=mongodb://localhost:27017 mocha test/*.ts -r ts-node/register --exit
          
   DOCKER_BUILD_PUSH:
     needs: [YARN_TEST]
