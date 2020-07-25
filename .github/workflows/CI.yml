@@ -9,7 +9,17 @@ on:
       - master
 
 jobs:
+  YARN_START:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Yarn install
+         run: yarn install
+
+       - name: Yarn start
+         run: yarn cross-env PORT=7777 MONGO_URI=mongodb://localhost:27017 ts-node src
+         
   DOCKER_BUILD_PUSH:
+    needs: [YARN_START]
     runs-on: ubuntu-latest
     steps:
       - name: CheckOut
@@ -37,25 +47,3 @@ jobs:
       - name: Push a Docker Image
         run:
           docker push woochanlee/workoutlog
-
-  DOCKER_COMPOSE_UP:
-    needs: [DOCKER_BUILD_PUSH]
-    runs-on: ubuntu-latest
-    steps:
-      - name: CheckOut
-        uses: actions/checkout@v2
-        with:
-          repository: workout-log/back-end
-
-      - name: Create Environment Files
-        run: |
-          touch .env
-          vim .env
-#          ${{ secrets.MONGO_DB_ENV }}
-#:wq!
-  #        touch mongo-init.js
- #         vim mongo-init.js
-#          ${{ secrets.MONGO_INIT_JS }} :wq!
-          
-      - name: Docker Compose Up
-        run: docker-compose up
