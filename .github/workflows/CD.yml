@@ -7,18 +7,10 @@ on:
 
 jobs:
   deploy:
+    needs:
+      on: DOCKER_BUILD_PUSH
     runs-on: ubuntu-latest
     steps:
-      - name: CheckOut
-        uses: actions/checkout@v2
-        with:
-          repository: workout-log/back-end
-
-      - name: Chmod
-        run: |
-          ls
-          chmod 777 deployment.sh
-
       - name: Delpoy to ec2
         uses: appleboy/ssh-action@master
         with:
