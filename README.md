@@ -1,6 +1,6 @@
-# front-end
+# back-end
 
-## back-end
+개발 끝 - (20.07.26 끝)
 
 workout-log의 백엔드 레포지토리 입니다.
 
