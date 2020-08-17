@@ -12,6 +12,8 @@ workout-log의 백엔드 레포지토리 입니다.
 - [x] ~~_CI_~~
 - [x] ~~_CD_~~
 - [x] ~~_Github Actions_~~
+- [x] ~~_domain 연결_~~
+- [x] ~~_aws ec2 deploy_~~
 
 ## workout-log(운동 일지)
 
