@@ -4,6 +4,14 @@
 
 workout-log의 백엔드 레포지토리 입니다.
 
+## To Do
+
+- [x] 코드 정리
+- [x] 도커 파일 수정
+- [x] 도커 컴포즈 수정
+- [x] CI
+- [x] CD
+
 ## workout-log(운동 일지)
 
 [웹사이트](http://workoutlog.club)
