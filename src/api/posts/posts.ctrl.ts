@@ -267,7 +267,8 @@ export const list = async (ctx: Context) => {
     ...(tag ? { tags: tag } : {}),
     ...(email ? { 'user.email': email } : {}),
   };
-
+console.log(query);
+console.log(await Post.find({ isPrivate: false, ...query }).exec());
   try {
     let posts = await Post.find({ isPrivate: false, ...query })
       .sort({
