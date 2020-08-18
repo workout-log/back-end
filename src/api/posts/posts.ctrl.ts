@@ -258,14 +258,12 @@ export const list = async (ctx: Context) => {
     ctx.status = 400;
     return;
   }
-
   const { username, tag, email } = ctx.query;
   const query = {
     ...(username ? { 'user.username': username } : {}),
     ...(tag ? { tags: tag } : {}),
     ...(email ? { 'user.email': email } : {}),
   };
-
   try {
     let posts = await Post.find({ isPrivate: false, ...query })
       .sort({
@@ -371,7 +369,6 @@ export const update = async (ctx: any) => {
   const fileDir = `upload/${time.getFullYear().toString()}/${month}`;
   const filesData: Array<string> = [];
   const pathList = post.files;
-  console.log(post);
   const nextData = { ...ctx.request.body };
   if (nextData.body) {
     nextData.body = sanitizeHtml(nextData.body, sanitizeOption);
