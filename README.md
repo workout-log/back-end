@@ -1,8 +1,19 @@
-# front-end
+# back-end
 
-## back-end
+개발 끝 - (20.07.26 끝)
 
 workout-log의 백엔드 레포지토리 입니다.
+
+## To Do
+
+- [x] ~~_코드 정리_~~
+- [x] ~~_도커 파일 수정_~~
+- [x] ~~_도커 컴포즈 수정_~~
+- [x] ~~_CI_~~
+- [x] ~~_CD_~~
+- [x] ~~_Github Actions_~~
+- [x] ~~_domain 연결_~~
+- [x] ~~_aws ec2 deploy_~~
 
 ## workout-log(운동 일지)
 

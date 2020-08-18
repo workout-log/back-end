@@ -17,7 +17,7 @@ jobs:
       - name: Mongo start
         run: docker run --name mongo -d -p 27017:27017 mongo:4.0
 
-      - name: Cache node modules # node modules 캐싱
+      - name: Cache node modules
         uses: actions/cache@v1
         with:
           path: node_modules
