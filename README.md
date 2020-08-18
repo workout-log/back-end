@@ -14,7 +14,7 @@ workout-log의 백엔드 레포지토리 입니다.
 - [x] ~~_Github Actions_~~
 - [x] ~~_domain 연결_~~
 - [x] ~~_aws ec2 deploy_~~
-- [x] ~~_디비 마이그레이션 (20.08.18)_~~
+- [x] ~~_디비 마이그레이션(20.08.18)_~~
 
 ## workout-log(운동 일지)
 
