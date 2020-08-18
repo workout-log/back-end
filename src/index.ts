@@ -29,7 +29,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('➡️  Connected to MongoDB2');
+    console.log('➡️  Connected to MongoDB');
   })
   .catch((e: any) => {
     console.error(e);
