@@ -274,6 +274,7 @@ export const list = async (ctx: Context) => {
         id: -1,
       })
       .exec();
+      console.log(posts);
     if (ctx.state.user) {
       let myPosts = await Post.find({
         ...query,
@@ -288,9 +289,17 @@ export const list = async (ctx: Context) => {
         .filter((p1, i, arr) => arr.findIndex((p2) => p1.id === p2.id) === i);
     }
     posts.sort((a, b) => b.id - a.id);
+    console.log(posts)
     const postCount: number = posts.length;
     posts = posts.slice((page - 1) * 10, page * 10);
+    console.log(posts)
     ctx.set('Last-Page', Math.ceil(postCount / 10).toString());
+    console.log(posts
+      .map((post) => post.toJSON())
+      .map((post) => ({
+        ...post,
+        body: removeHtmlAndShorten(post.body),
+      })))
     ctx.body = posts
       .map((post) => post.toJSON())
       .map((post) => ({
