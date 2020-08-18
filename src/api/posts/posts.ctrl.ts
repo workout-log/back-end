@@ -253,6 +253,7 @@ const removeHtmlAndShorten = (body) => {
 */
 
 export const list = async (ctx: Context) => {
+  console.log(1)
   console.log(await Post.find().exec());
   const page = parseInt(ctx.query.page || '1', 10);
   if (page < 1) {
