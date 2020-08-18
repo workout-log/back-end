@@ -253,29 +253,23 @@ const removeHtmlAndShorten = (body) => {
 */
 
 export const list = async (ctx: Context) => {
-  console.log(1)
-  console.log(await Post.find().exec());
   const page = parseInt(ctx.query.page || '1', 10);
   if (page < 1) {
     ctx.status = 400;
     return;
   }
-
   const { username, tag, email } = ctx.query;
   const query = {
     ...(username ? { 'user.username': username } : {}),
     ...(tag ? { tags: tag } : {}),
     ...(email ? { 'user.email': email } : {}),
   };
-console.log(query);
-console.log(await Post.find({ isPrivate: false, ...query }).exec());
   try {
     let posts = await Post.find({ isPrivate: false, ...query })
       .sort({
         id: -1,
       })
       .exec();
-      console.log(posts);
     if (ctx.state.user) {
       let myPosts = await Post.find({
         ...query,
@@ -290,17 +284,9 @@ console.log(await Post.find({ isPrivate: false, ...query }).exec());
         .filter((p1, i, arr) => arr.findIndex((p2) => p1.id === p2.id) === i);
     }
     posts.sort((a, b) => b.id - a.id);
-    console.log(posts)
     const postCount: number = posts.length;
     posts = posts.slice((page - 1) * 10, page * 10);
-    console.log(posts)
     ctx.set('Last-Page', Math.ceil(postCount / 10).toString());
-    console.log(posts
-      .map((post) => post.toJSON())
-      .map((post) => ({
-        ...post,
-        body: removeHtmlAndShorten(post.body),
-      })))
     ctx.body = posts
       .map((post) => post.toJSON())
       .map((post) => ({
@@ -383,7 +369,6 @@ export const update = async (ctx: any) => {
   const fileDir = `upload/${time.getFullYear().toString()}/${month}`;
   const filesData: Array<string> = [];
   const pathList = post.files;
-  console.log(post);
   const nextData = { ...ctx.request.body };
   if (nextData.body) {
     nextData.body = sanitizeHtml(nextData.body, sanitizeOption);
