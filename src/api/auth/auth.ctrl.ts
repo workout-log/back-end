@@ -160,8 +160,7 @@ export const update = async (ctx: any) => {
   if (!JSON.parse(fileChanged)) {
     profileData = ctx.state.user.profileImage;
     console.log('!fileChanged', profileData);
-    updateDatabase();
-    return;
+    return await updateDatabase();
   }
   const profileImage = ctx.state.user.profileImage;
   if (
@@ -174,8 +173,8 @@ console.log('delete')
   if (JSON.parse(isDefaultImage)) {
     profileData = 'upload/profileImage/default.png';
     console.log('isDefaultImage', profileData);
-    updateDatabase();
-    return;
+    return await updateDatabase();
+    
   }
 
   
