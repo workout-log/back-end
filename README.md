@@ -1,6 +1,6 @@
 # back-end
 
-개발 끝 - (20.07.26 끝)
+기능 개발 끝 - (20.07.26 끝)
 
 workout-log의 백엔드 레포지토리 입니다.
 
@@ -14,6 +14,7 @@ workout-log의 백엔드 레포지토리 입니다.
 - [x] ~~_Github Actions_~~
 - [x] ~~_domain 연결_~~
 - [x] ~~_aws ec2 deploy_~~
+- [x] ~~_디비 마이그레이션(20.08.18)_~~
 
 ## workout-log(운동 일지)
 
