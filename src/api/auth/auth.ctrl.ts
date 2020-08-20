@@ -157,6 +157,7 @@ export const update = async (ctx: any) => {
 
   if (!fileChanged) {
     profileData = ctx.state.user.profileImage;
+    console.log('!fileChanged', profileData);
     updateDatabase();
     return;
   }
@@ -164,10 +165,13 @@ export const update = async (ctx: any) => {
   if (
     profileImage.includes('upload/profileImage') &&
     profileImage !== 'upload/profileImage/default.png'
-  )
+  ) {
+console.log('delete')
     deleteFile(profileImage);
+  }
   if (isDefaultImage) {
     profileData = 'upload/profileImage/default.png';
+    console.log('isDefaultImage', profileData);
     updateDatabase();
     return;
   }
