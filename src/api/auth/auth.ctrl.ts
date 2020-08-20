@@ -160,18 +160,19 @@ export const update = async (ctx: any) => {
     updateDatabase();
     return;
   }
-  if (isDefaultImage) {
-    profileData = 'upload/profileImage/default.png';
-    updateDatabase();
-    return;
-  }
-
   const profileImage = ctx.state.user.profileImage;
   if (
     profileImage.includes('upload/profileImage') &&
     profileImage !== 'upload/profileImage/default.PNG'
   )
     deleteFile(profileImage);
+  if (isDefaultImage) {
+    profileData = 'upload/profileImage/default.png';
+    updateDatabase();
+    return;
+  }
+
+  
   if (file) {
     let fileName = uuidv1();
     let extension = file.name.split('.').slice(-1)[0].toUpperCase();
