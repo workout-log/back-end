@@ -130,6 +130,8 @@ export const update = async (ctx: any) => {
     return;
   }
   const { username, fileChanged, isDefaultImage } = ctx.request.body;
+  console.log(fileChanged, isDefaultImage);
+  console.log(JSON.parse(fileChanged))
   const file = ctx.request.files.file;
   const fileDir = `upload/profileImage`;
   let profileData: string;
