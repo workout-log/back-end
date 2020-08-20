@@ -117,6 +117,8 @@ export const update = async (ctx: any) => {
   const schema = Joi.object().keys({
     username: Joi.string().required(),
     file: Joi.object(),
+    fileChanged: Joi.boolean().required(),
+    isDefaultImage: Joi.boolean().required,
   });
   const result = schema.validate({
     ...ctx.request.body,
@@ -127,7 +129,7 @@ export const update = async (ctx: any) => {
     ctx.body = result.error;
     return;
   }
-  const { username } = ctx.request.body;
+  const { username, fileChanged, isDefaultImage } = ctx.request.body;
   const file = ctx.request.files.file;
   const fileDir = `upload/profileImage`;
   let profileData: string;
@@ -152,6 +154,17 @@ export const update = async (ctx: any) => {
       ctx.throw(500, e);
     }
   };
+
+  if (!fileChanged) {
+    profileData = ctx.state.user.profileImage;
+    updateDatabase();
+    return;
+  }
+  if (isDefaultImage) {
+    profileData = 'upload/profileImage/default.png';
+    updateDatabase();
+    return;
+  }
 
   const profileImage = ctx.state.user.profileImage;
   if (
