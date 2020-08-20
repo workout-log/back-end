@@ -286,7 +286,8 @@ export const list = async (ctx: Context) => {
     posts.sort((a, b) => b.id - a.id);
     const postCount: number = posts.length;
     posts = posts.slice((page - 1) * 10, page * 10);
-    ctx.set('Last-Page', Math.ceil(postCount / 10).toString());
+    if (posts.length === 0) ctx.set('Last-Page', '1');
+    else ctx.set('Last-Page', Math.ceil(postCount / 10).toString());
     ctx.body = posts
       .map((post) => post.toJSON())
       .map((post) => ({
