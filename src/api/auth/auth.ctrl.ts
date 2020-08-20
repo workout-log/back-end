@@ -163,7 +163,7 @@ export const update = async (ctx: any) => {
   const profileImage = ctx.state.user.profileImage;
   if (
     profileImage.includes('upload/profileImage') &&
-    profileImage !== 'upload/profileImage/default.PNG'
+    profileImage !== 'upload/profileImage/default.png'
   )
     deleteFile(profileImage);
   if (isDefaultImage) {
