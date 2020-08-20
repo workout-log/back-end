@@ -118,7 +118,7 @@ export const update = async (ctx: any) => {
     username: Joi.string().required(),
     file: Joi.object(),
     fileChanged: Joi.boolean().required(),
-    isDefaultImage: Joi.boolean().required,
+    isDefaultImage: Joi.boolean().required(),
   });
   const result = schema.validate({
     ...ctx.request.body,
