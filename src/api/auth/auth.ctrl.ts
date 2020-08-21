@@ -136,8 +136,6 @@ export const update = async (ctx: any) => {
     return;
   }
   const { username, fileChanged, isDefaultImage } = ctx.request.body;
-  console.log(typeof fileChanged, typeof isDefaultImage);
-  console.log(typeof JSON.parse(fileChanged))
   const file = ctx.request.files.file;
   const fileDir = `upload/profileImage`;
   let profileData: string;
@@ -165,7 +163,6 @@ export const update = async (ctx: any) => {
 
   if (!JSON.parse(fileChanged)) {
     profileData = ctx.state.user.profileImage;
-    console.log('!fileChanged', profileData);
     return await updateDatabase();
   }
   const profileImage = ctx.state.user.profileImage;
@@ -173,12 +170,10 @@ export const update = async (ctx: any) => {
     profileImage.includes('upload/profileImage') &&
     profileImage !== 'upload/profileImage/default.png'
   ) {
-console.log('delete')
     deleteFile(profileImage);
   }
   if (JSON.parse(isDefaultImage)) {
     profileData = 'upload/profileImage/default.png';
-    console.log('isDefaultImage', profileData);
     return await updateDatabase();
     
   }
