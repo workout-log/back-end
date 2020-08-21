@@ -45,19 +45,25 @@ export const login = async (ctx: Context) => {
       return;
     }
 
-    const loginType = email.split('@')[1];
-    if (!loginTypeList.includes(loginType)) {
-      ctx.status = 400;
-      ctx.body = {
-        message: '허용되지 않는 이메일 사이트',
-      };
-      return;
-    }
+    /*
+      goole계정 중 기관명으로 끝나는 경우도 있음
+      ex) email@dsm.hs.kr
+
+      const loginType = email.split('@')[1];
+      if (!loginTypeList.includes(loginType)) {
+        ctx.status = 400;
+        ctx.body = {
+          message: '허용되지 않는 이메일 사이트',
+        };
+        return;
+      }
+    */
+   const loginType = 'gmail.com';
     user = new User({
       username,
       email,
       profileImage,
-      loginType,
+      loginType
     });
     await user.save();
 
