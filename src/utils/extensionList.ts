@@ -1,1 +1,1 @@
-export const extensionList = ["JPEG", "JPEG/JFIF", "PNG", "HEIF"];
+export const extensionList = ["JPG", "JPEG", "JPEG/JFIF", "PNG", "HEIF"];
