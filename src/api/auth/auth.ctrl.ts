@@ -45,19 +45,25 @@ export const login = async (ctx: Context) => {
       return;
     }
 
-    const loginType = email.split('@')[1];
-    if (!loginTypeList.includes(loginType)) {
-      ctx.status = 400;
-      ctx.body = {
-        message: '허용되지 않는 이메일 사이트',
-      };
-      return;
-    }
+    /*
+      goole계정 중 기관명으로 끝나는 경우도 있음
+      ex) email@dsm.hs.kr
+
+      const loginType = email.split('@')[1];
+      if (!loginTypeList.includes(loginType)) {
+        ctx.status = 400;
+        ctx.body = {
+          message: '허용되지 않는 이메일 사이트',
+        };
+        return;
+      }
+    */
+   const loginType = 'gmail.com';
     user = new User({
       username,
       email,
       profileImage,
-      loginType,
+      loginType
     });
     await user.save();
 
@@ -117,6 +123,8 @@ export const update = async (ctx: any) => {
   const schema = Joi.object().keys({
     username: Joi.string().required(),
     file: Joi.object(),
+    fileChanged: Joi.boolean().required(),
+    isDefaultImage: Joi.boolean().required(),
   });
   const result = schema.validate({
     ...ctx.request.body,
@@ -127,7 +135,7 @@ export const update = async (ctx: any) => {
     ctx.body = result.error;
     return;
   }
-  const { username } = ctx.request.body;
+  const { username, fileChanged, isDefaultImage } = ctx.request.body;
   const file = ctx.request.files.file;
   const fileDir = `upload/profileImage`;
   let profileData: string;
@@ -153,12 +161,24 @@ export const update = async (ctx: any) => {
     }
   };
 
+  if (!JSON.parse(fileChanged)) {
+    profileData = ctx.state.user.profileImage;
+    return await updateDatabase();
+  }
   const profileImage = ctx.state.user.profileImage;
   if (
     profileImage.includes('upload/profileImage') &&
-    profileImage !== 'upload/profileImage/default.PNG'
-  )
+    profileImage !== 'upload/profileImage/default.png'
+  ) {
     deleteFile(profileImage);
+  }
+  if (JSON.parse(isDefaultImage)) {
+    profileData = 'upload/profileImage/default.png';
+    return await updateDatabase();
+    
+  }
+
+  
   if (file) {
     let fileName = uuidv1();
     let extension = file.name.split('.').slice(-1)[0].toUpperCase();
