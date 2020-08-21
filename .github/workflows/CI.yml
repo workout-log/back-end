@@ -49,7 +49,7 @@ jobs:
 
       - name: Build a Docker Image
         run: |
-          docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CROSS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
+          docker build --build-arg SCRIPT="PORT=$PORT MONGO_URI=$MONGO_URI USERNAME=$USERNAME PASSWORD=$PASSWORD CORRS_ORIGIN_URI=$CORS_ORIGIN_URI JWT_SECRET=$JWT_SECRET" -t woochanlee/workoutlog .
         env:
           PORT: ${{ secrets.PORT }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
