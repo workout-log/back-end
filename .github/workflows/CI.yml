@@ -55,7 +55,7 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          CORS_ORIGIN_URI=: ${{ secrets.CORS_ORIGIN_URI= }}
+          CORS_ORIGIN_URI: ${{ secrets.CORS_ORIGIN_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Push a Docker Image
