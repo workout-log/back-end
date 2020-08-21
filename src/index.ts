@@ -8,7 +8,7 @@ import koaStatic from 'koa-static';
 import api from './api';
 import jwtMiddleware from './lib/jwtMiddleware';
 
-const { PORT, MONGO_URI, USERNAME, PASSWORD, CORRS_ORIGIN_URI } = process.env;
+const { PORT, MONGO_URI, USERNAME, PASSWORD, CORS_ORIGIN_URI } = process.env;
 
 const auth = {
   ...(USERNAME && PASSWORD
@@ -43,7 +43,7 @@ router.use('/api', api.routes());
 app.use(bodyparser());
 app.use(
   cors({
-    origin: CORRS_ORIGIN_URI,
+    origin: CORS_ORIGIN_URI,
     credentials: true,
     exposeHeaders: 'Last-Page',
   }),
