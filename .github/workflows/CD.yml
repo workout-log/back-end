@@ -14,7 +14,6 @@ jobs:
           USERNAME: ${{ secrets.EC2_USERNAME }}
           HOST: ${{ secrets.EC2_HOST }}
           KEY: ${{ secrets.SSH_DEPLOYMENT_KEY }}
-          PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd back-end
             git pull
