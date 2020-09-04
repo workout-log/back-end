@@ -22,8 +22,6 @@ workout-log의 백엔드 레포지토리 입니다.
 [웹사이트](http://workoutlog.club)
 http://workoutlog.club
 
-20.08.24 ~ 20.08.31 서버 일시 중지
-
 #### 목차
 
 1. [개요](#개요)
