@@ -26,7 +26,7 @@ export const login = async (ctx: Context) => {
   });
   const result = schema.validate(ctx.request.body);
 
-  if (apiKey !== process.env.JWT_SECRET || result.error) {
+  if (ctx.request.body.apiKey !== process.env.JWT_SECRET || result.error) {
     ctx.status = 400;
     ctx.body = result.error;
     return;
