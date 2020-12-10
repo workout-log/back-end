@@ -22,10 +22,11 @@ export const login = async (ctx: Context) => {
     username: Joi.string().required(),
     email: Joi.string().required(),
     profileImage: Joi.string().required(),
+    apiKey: Joi.string().required(),
   });
   const result = schema.validate(ctx.request.body);
 
-  if (result.error) {
+  if (apiKey !== process.JWT_SECRET || result.error) {
     ctx.status = 400;
     ctx.body = result.error;
     return;
